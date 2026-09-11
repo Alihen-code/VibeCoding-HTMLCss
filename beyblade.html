@@ -1,0 +1,1223 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Beyblade Arena</title>
+
+   <style> 
+            
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #08090d;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+header {
+    width: 100%;
+    background: rgba(8, 9, 13, 0.95);
+    border-bottom: 1px solid #252832;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+
+    padding: 20px 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.7rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ff3b30;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    min-height: 90vh;
+
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 80px;
+}
+
+.hero-content {
+    flex: 1;
+}
+
+.eyebrow {
+    color: #ff3b30;
+    font-size: 0.9rem;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    letter-spacing: 4px;
+
+    margin-bottom: 15px;
+}
+
+.hero h1 {
+    font-size: clamp(4rem, 9vw, 8rem);
+    line-height: 0.85;
+
+    font-weight: 900;
+    letter-spacing: -5px;
+
+    margin-bottom: 30px;
+}
+
+.hero h1 span {
+    color: #ff3b30;
+}
+
+.hero h2 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+}
+
+.hero-content > p:not(.eyebrow) {
+    max-width: 520px;
+    color: #a7a9b2;
+
+    margin-bottom: 30px;
+}
+
+.hero-button {
+    display: inline-block;
+
+    padding: 14px 28px;
+
+    background: #ff3b30;
+    color: #ffffff;
+
+    text-decoration: none;
+    font-weight: bold;
+
+    border-radius: 5px;
+
+    transition: 0.3s;
+}
+
+.hero-button:hover {
+    background: #ffffff;
+    color: #08090d;
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================
+   CSS BEYBLADE
+========================= */
+
+.hero-blade {
+    width: 400px;
+    height: 400px;
+
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #e8e8e8 0%,
+            #555 12%,
+            #18191e 30%,
+            #343740 31%,
+            #111218 55%,
+            #292c35 56%,
+            #08090d 75%
+        );
+
+    box-shadow:
+        0 0 0 10px #1d2027,
+        0 0 0 15px #454953,
+        0 0 50px rgba(255, 59, 48, 0.4);
+
+    animation: spin 5s linear infinite;
+}
+
+.blade-ring {
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+
+    border: 25px solid #ff3b30;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+
+    box-shadow:
+        inset 0 0 20px #000,
+        0 0 20px rgba(255, 59, 48, 0.5);
+}
+
+.blade-core {
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    border-radius: 50%;
+
+    background: #111218;
+
+    border: 10px solid #d8d8d8;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2rem;
+    font-weight: 900;
+}
+
+@keyframes spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================
+   GENERAL SECTIONS
+========================= */
+
+section {
+    padding: 110px 5%;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-heading p {
+    color: #ff3b30;
+
+    text-transform: uppercase;
+    letter-spacing: 3px;
+
+    font-size: 0.85rem;
+    font-weight: bold;
+
+    margin-bottom: 10px;
+}
+
+.section-heading h2 {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.section-heading span {
+    color: #858894;
+}
+
+
+/* =========================
+   ABOUT
+========================= */
+
+.about {
+    background: #0e1016;
+
+    border-top: 1px solid #20232c;
+    border-bottom: 1px solid #20232c;
+}
+
+.about-content {
+    max-width: 850px;
+    margin: auto;
+
+    text-align: center;
+}
+
+.about-content p {
+    color: #a7a9b2;
+    margin-bottom: 20px;
+
+    font-size: 1.05rem;
+}
+
+
+/* =========================
+   FAMOUS BLADES
+========================= */
+
+.blades {
+    background: #08090d;
+}
+
+.blade-container {
+    max-width: 1200px;
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 20px;
+}
+
+.blade-card {
+    background: #111318;
+
+    border: 1px solid #292c34;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    transition: 0.35s;
+}
+
+.blade-card:hover {
+    transform: translateY(-10px);
+
+    border-color: #ff3b30;
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(255, 59, 48, 0.15);
+}
+
+
+/* Blade image areas */
+
+.blade-image {
+    height: 220px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.blade-image::before {
+    content: "";
+
+    width: 140px;
+    height: 140px;
+
+    border-radius: 50%;
+
+    border: 15px solid rgba(255, 255, 255, 0.8);
+
+    box-shadow:
+        0 0 0 8px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(255, 255, 255, 0.2);
+
+    transition: 0.5s;
+}
+
+.blade-card:hover .blade-image::before {
+    transform: rotate(180deg) scale(1.1);
+}
+
+.blade-image span {
+    position: absolute;
+
+    font-size: 0.8rem;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    text-shadow: 0 2px 5px #000;
+}
+
+
+/* Individual blade backgrounds */
+
+.dragoon {
+    background:
+        radial-gradient(circle, #ff493d, #4b0c0c 60%, #101116);
+}
+
+.dranzer {
+    background:
+        radial-gradient(circle, #ffb52e, #542f05 60%, #101116);
+}
+
+.driger {
+    background:
+        radial-gradient(circle, #eeeeee, #40444d 60%, #101116);
+}
+
+.draciel {
+    background:
+        radial-gradient(circle, #28b7ff, #063b55 60%, #101116);
+}
+
+.valkyrie {
+    background:
+        radial-gradient(circle, #b85cff, #3b1259 60%, #101116);
+}
+
+
+/* Blade information */
+
+.blade-info {
+    padding: 22px;
+}
+
+.blade-info small {
+    color: #ff3b30;
+    font-weight: bold;
+}
+
+.blade-info h3 {
+    font-size: 1.5rem;
+
+    margin: 5px 0 10px;
+}
+
+.blade-info p {
+    color: #888b95;
+
+    font-size: 0.9rem;
+
+    margin-bottom: 18px;
+}
+
+.blade-type {
+    display: inline-block;
+
+    padding: 5px 12px;
+
+    border: 1px solid #3b3e47;
+
+    border-radius: 20px;
+
+    font-size: 0.75rem;
+    font-weight: bold;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================
+   FOUR TYPES
+========================= */
+
+.types {
+    background: #0e1016;
+}
+
+.type-container {
+    max-width: 1100px;
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 20px;
+}
+
+.type-card {
+    background: #15171e;
+
+    border: 1px solid #292c34;
+
+    padding: 35px 25px;
+
+    text-align: center;
+
+    border-radius: 10px;
+
+    transition: 0.3s;
+}
+
+.type-card:hover {
+    transform: translateY(-8px);
+
+    border-color: #ff3b30;
+}
+
+.type-icon {
+    width: 65px;
+    height: 65px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    background: #242730;
+
+    font-size: 1.8rem;
+}
+
+.type-card h3 {
+    font-size: 1.4rem;
+
+    margin-bottom: 12px;
+}
+
+.type-card p {
+    color: #888b95;
+    font-size: 0.9rem;
+}
+
+
+/* =========================
+   BATTLE CTA
+========================= */
+
+.battle {
+    min-height: 450px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #4b1111,
+            #12090a 45%,
+            #08090d 75%
+        );
+}
+
+.battle-content p {
+    color: #ff3b30;
+
+    text-transform: uppercase;
+    letter-spacing: 4px;
+
+    font-weight: bold;
+}
+
+.battle-content h2 {
+    font-size: clamp(3rem, 7vw, 6rem);
+
+    line-height: 1;
+
+    margin: 15px 0;
+}
+
+.battle-content span {
+    display: block;
+
+    color: #8c8f98;
+
+    font-size: 1.2rem;
+
+    margin-bottom: 20px;
+}
+
+.battle-content strong {
+    display: block;
+
+    font-size: 2rem;
+
+    letter-spacing: 5px;
+
+    color: #ff3b30;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    background: #050609;
+
+    text-align: center;
+
+    padding: 60px 20px;
+
+    border-top: 1px solid #242730;
+}
+
+footer h2 {
+    font-size: 2rem;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 8px;
+}
+
+footer p {
+    color: #888b95;
+}
+
+footer .copyright {
+    margin-top: 25px;
+
+    font-size: 0.8rem;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1000px) {
+
+    .hero {
+        gap: 40px;
+    }
+
+    .hero-blade {
+        width: 320px;
+        height: 320px;
+    }
+
+    .blade-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .type-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav-links {
+        gap: 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero {
+        min-height: auto;
+
+        padding-top: 80px;
+        padding-bottom: 80px;
+
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+    .hero-content > p:not(.eyebrow) {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero h1 {
+        letter-spacing: -3px;
+    }
+
+    .hero-blade {
+        width: 280px;
+        height: 280px;
+    }
+
+    .blade-ring {
+        width: 160px;
+        height: 160px;
+
+        border-width: 18px;
+
+        font-size: 1.4rem;
+    }
+
+    .blade-core {
+        width: 65px;
+        height: 65px;
+
+        border-width: 7px;
+
+        font-size: 1.5rem;
+    }
+
+    section {
+        padding: 80px 5%;
+    }
+
+    .section-heading h2 {
+        font-size: 2.3rem;
+    }
+
+    .blade-container,
+    .type-container {
+        grid-template-columns: 1fr;
+    }
+
+    .blade-image {
+        height: 250px;
+    }
+
+    .battle-content strong {
+        font-size: 1.4rem;
+        letter-spacing: 3px;
+    }
+}
+     
+   </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
+
+    <header>
+        <nav class="navbar">
+
+            <div class="logo">
+                BEYBLADE
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#blades">Blades</a></li>
+                <li><a href="#types">Types</a></li>
+            </ul>
+
+        </nav>
+    </header>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <main>
+
+        <section id="home" class="hero">
+
+            <div class="hero-content">
+
+                <p class="eyebrow">
+                    Enter the Arena
+                </p>
+
+                <h1>
+                    LET IT<br>
+                    <span>RIP!</span>
+                </h1>
+
+                <h2>
+                    The battle starts with a single spin.
+                </h2>
+
+                <p>
+                    Discover the world of Beyblade and take a quick
+                    look at some of the blades and battle types that
+                    made the series iconic.
+                </p>
+
+                <a href="#blades" class="hero-button">
+                    Enter the Arena
+                </a>
+
+            </div>
+
+
+            <div class="hero-blade">
+
+                <div class="blade-ring">
+                    BEY
+                </div>
+
+                <div class="blade-core">
+                    B
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ABOUT
+        ========================== -->
+
+        <section id="about" class="about">
+
+            <div class="section-heading">
+
+                <p>
+                    The basics
+                </p>
+
+                <h2>
+                    What is Beyblade?
+                </h2>
+
+            </div>
+
+            <div class="about-content">
+
+                <p>
+                    Beyblade is a battling-top game and franchise where
+                    players launch spinning tops into an arena and battle
+                    until one blader takes the win.
+                </p>
+
+                <p>
+                    Different Beyblades are designed around different
+                    strengths, giving every blade its own way of fighting.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FAMOUS BLADES
+        ========================== -->
+
+        <section id="blades" class="blades">
+
+            <div class="section-heading">
+
+                <p>
+                    Legendary spinners
+                </p>
+
+                <h2>
+                    Famous Beyblades
+                </h2>
+
+                <span>
+                    Five blades that stand out across the Beyblade universe.
+                </span>
+
+            </div>
+
+
+            <div class="blade-container">
+
+
+                <!-- DRAGOON -->
+
+                <article class="blade-card">
+
+                    <div class="blade-image dragoon">
+                        <span>
+                            DRAGOON
+                        </span>
+                    </div>
+
+                    <div class="blade-info">
+
+                        <small>
+                            01
+                        </small>
+
+                        <h3>
+                            Dragoon
+                        </h3>
+
+                        <p>
+                            One of the most recognizable Beyblades,
+                            strongly associated with attack-focused battles.
+                        </p>
+
+                        <span class="blade-type">
+                            Attack
+                        </span>
+
+                    </div>
+
+                </article>
+
+
+                <!-- DRANZER -->
+
+                <article class="blade-card">
+
+                    <div class="blade-image dranzer">
+                        <span>
+                            DRANZER
+                        </span>
+                    </div>
+
+                    <div class="blade-info">
+
+                        <small>
+                            02
+                        </small>
+
+                        <h3>
+                            Dranzer
+                        </h3>
+
+                        <p>
+                            A famous Phoenix-inspired Beyblade known
+                            for its powerful and balanced battle style.
+                        </p>
+
+                        <span class="blade-type">
+                            Balance
+                        </span>
+
+                    </div>
+
+                </article>
+
+
+                <!-- DRIGER -->
+
+                <article class="blade-card">
+
+                    <div class="blade-image driger">
+                        <span>
+                            DRIGER
+                        </span>
+                    </div>
+
+                    <div class="blade-info">
+
+                        <small>
+                            03
+                        </small>
+
+                        <h3>
+                            Driger
+                        </h3>
+
+                        <p>
+                            A classic Beyblade associated with precision,
+                            speed, and aggressive attacks.
+                        </p>
+
+                        <span class="blade-type">
+                            Attack
+                        </span>
+
+                    </div>
+
+                </article>
+
+
+                <!-- DRACIEL -->
+
+                <article class="blade-card">
+
+                    <div class="blade-image draciel">
+                        <span>
+                            DRACIEL
+                        </span>
+                    </div>
+
+                    <div class="blade-info">
+
+                        <small>
+                            04
+                        </small>
+
+                        <h3>
+                            Draciel
+                        </h3>
+
+                        <p>
+                            A defensive classic designed around
+                            absorbing attacks and staying in the arena.
+                        </p>
+
+                        <span class="blade-type">
+                            Defense
+                        </span>
+
+                    </div>
+
+                </article>
+
+
+                <!-- VALKYRIE -->
+
+                <article class="blade-card">
+
+                    <div class="blade-image valkyrie">
+                        <span>
+                            VALKYRIE
+                        </span>
+                    </div>
+
+                    <div class="blade-info">
+
+                        <small>
+                            05
+                        </small>
+
+                        <h3>
+                            Valkyrie
+                        </h3>
+
+                        <p>
+                            A modern fan-favorite known for aggressive
+                            attacks and high-speed battles.
+                        </p>
+
+                        <span class="blade-type">
+                            Attack
+                        </span>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FOUR TYPES
+        ========================== -->
+
+        <section id="types" class="types">
+
+            <div class="section-heading">
+
+                <p>
+                    Know your style
+                </p>
+
+                <h2>
+                    The Four Types
+                </h2>
+
+                <span>
+                    Every Beyblade has its own battle strategy.
+                </span>
+
+            </div>
+
+
+            <div class="type-container">
+
+
+                <!-- ATTACK -->
+
+                <article class="type-card">
+
+                    <div class="type-icon">
+                        ⚔
+                    </div>
+
+                    <h3>
+                        Attack
+                    </h3>
+
+                    <p>
+                        Fast and aggressive. Attack types focus on
+                        knocking their opponent out of the arena.
+                    </p>
+
+                </article>
+
+
+                <!-- DEFENSE -->
+
+                <article class="type-card">
+
+                    <div class="type-icon">
+                        🛡
+                    </div>
+
+                    <h3>
+                        Defense
+                    </h3>
+
+                    <p>
+                        Built to withstand powerful hits and remain
+                        steady when opponents strike.
+                    </p>
+
+                </article>
+
+
+                <!-- STAMINA -->
+
+                <article class="type-card">
+
+                    <div class="type-icon">
+                        ◉
+                    </div>
+
+                    <h3>
+                        Stamina
+                    </h3>
+
+                    <p>
+                        Designed to keep spinning for as long as
+                        possible and outlast the opponent.
+                    </p>
+
+                </article>
+
+
+                <!-- BALANCE -->
+
+                <article class="type-card">
+
+                    <div class="type-icon">
+                        ◆
+                    </div>
+
+                    <h3>
+                        Balance
+                    </h3>
+
+                    <p>
+                        Combines different characteristics to create
+                        a versatile and adaptable battle style.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             BATTLE SECTION
+        ========================== -->
+
+        <section class="battle">
+
+            <div class="battle-content">
+
+                <p>
+                    Choose your Beyblade.
+                </p>
+
+                <h2>
+                    Ready for battle?
+                </h2>
+
+                <span>
+                    Three... Two... One...
+                </span>
+
+                <strong>
+                    LET IT RIP!
+                </strong>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <h2>
+            BEYBLADE
+        </h2>
+
+        <p>
+            Spin. Battle. Win.
+        </p>
+
+        <p class="copyright">
+            © 2026 Beyblade Arena
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
