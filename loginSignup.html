@@ -1,0 +1,974 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Animated Login Form</title>
+
+    <style>
+              
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #252a4a,
+            #10121c 45%,
+            #080910
+        );
+
+    color: #ffffff;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   HIDDEN SWITCH
+========================= */
+
+#form-switch {
+    display: none;
+}
+
+
+/* =========================
+   BACKGROUND SHAPES
+========================= */
+
+.shape {
+    position: fixed;
+
+    border-radius: 50%;
+
+    filter: blur(1px);
+
+    opacity: 0.6;
+
+    pointer-events: none;
+}
+
+.shape-one {
+    width: 220px;
+    height: 220px;
+
+    background: #725cff;
+
+    top: -80px;
+    left: -60px;
+
+    animation: float-one 7s ease-in-out infinite;
+}
+
+.shape-two {
+    width: 180px;
+    height: 180px;
+
+    background: #ff4f9a;
+
+    right: -50px;
+    bottom: 50px;
+
+    animation: float-two 8s ease-in-out infinite;
+}
+
+.shape-three {
+    width: 90px;
+    height: 90px;
+
+    background: #4dd9ff;
+
+    right: 20%;
+    top: 15%;
+
+    animation: float-three 5s ease-in-out infinite;
+}
+
+
+@keyframes float-one {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(30px, 40px);
+    }
+}
+
+
+@keyframes float-two {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(-35px, -25px);
+    }
+}
+
+
+@keyframes float-three {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(30px);
+    }
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+}
+
+
+/* =========================
+   AUTH CARD
+========================= */
+
+.auth-card {
+    width: 430px;
+    min-height: 650px;
+
+    position: relative;
+
+    padding: 45px 45px 35px;
+
+    background: rgba(20, 22, 34, 0.88);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 25px;
+
+    backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 30px 70px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    overflow: hidden;
+
+    animation: card-entry 0.8s ease;
+}
+
+
+@keyframes card-entry {
+
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================
+   TOP GLOW
+========================= */
+
+.auth-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    top: -120px;
+    right: -90px;
+
+    border-radius: 50%;
+
+    background: #725cff;
+
+    filter: blur(70px);
+
+    opacity: 0.4;
+}
+
+
+/* =========================
+   USER SVG
+========================= */
+
+.user-picture {
+    width: 115px;
+    height: 115px;
+
+    margin: 0 auto 20px;
+
+    position: relative;
+
+    z-index: 5;
+
+    animation: user-float 4s ease-in-out infinite;
+}
+
+
+.user-picture svg {
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+}
+
+
+.svg-circle {
+    fill: #191c2b;
+
+    stroke: #725cff;
+
+    stroke-width: 3;
+
+    stroke-dasharray: 10 7;
+
+    animation: circle-spin 12s linear infinite;
+}
+
+
+.svg-head {
+    fill: #ffffff;
+}
+
+
+.svg-body {
+    fill: #725cff;
+}
+
+
+.svg-highlight {
+    fill: #dfe1ff;
+
+    animation: highlight-pulse 2s ease-in-out infinite;
+}
+
+
+@keyframes user-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+
+@keyframes circle-spin {
+
+    to {
+        transform: rotate(360deg);
+        transform-origin: center;
+    }
+}
+
+
+@keyframes highlight-pulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================
+   FORMS WRAPPER
+========================= */
+
+.forms-wrapper {
+    position: relative;
+
+    width: 100%;
+    min-height: 430px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form {
+    position: absolute;
+
+    width: 100%;
+
+    top: 0;
+    left: 0;
+
+    transition:
+        transform 0.6s cubic-bezier(.68, -0.4, .3, 1.4),
+        opacity 0.4s ease;
+}
+
+
+/* LOGIN DEFAULT */
+
+.login-form {
+    transform: translateX(0);
+
+    opacity: 1;
+}
+
+
+/* SIGNUP DEFAULT */
+
+.signup-form {
+    transform: translateX(120%);
+
+    opacity: 0;
+}
+
+
+/* =========================
+   SWITCH ANIMATION
+========================= */
+
+#form-switch:checked ~ .page .login-form {
+    transform: translateX(-120%);
+
+    opacity: 0;
+}
+
+
+#form-switch:checked ~ .page .signup-form {
+    transform: translateX(0);
+
+    opacity: 1;
+}
+
+
+/* =========================
+   FORM TEXT
+========================= */
+
+.form-tag {
+    display: block;
+
+    color: #8e82ff;
+
+    font-size: 0.75rem;
+
+    font-weight: bold;
+
+    text-transform: uppercase;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 8px;
+}
+
+
+.form h1 {
+    font-size: 2.7rem;
+
+    line-height: 1;
+
+    margin-bottom: 12px;
+}
+
+
+.description {
+    color: #858998;
+
+    font-size: 0.9rem;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+.input-box {
+    position: relative;
+
+    margin-bottom: 24px;
+}
+
+
+.input-box input {
+    width: 100%;
+
+    height: 55px;
+
+    padding: 15px 15px;
+
+    background: #11131e;
+
+    border: 1px solid #303344;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    color: #ffffff;
+
+    font-size: 0.95rem;
+
+    transition: 0.3s;
+}
+
+
+.input-box label {
+    position: absolute;
+
+    left: 15px;
+    top: 16px;
+
+    color: #737687;
+
+    font-size: 0.9rem;
+
+    pointer-events: none;
+
+    transition: 0.25s;
+}
+
+
+/* Floating label */
+
+.input-box input:focus,
+.input-box input:not(:placeholder-shown) {
+    border-color: #725cff;
+
+    box-shadow:
+        0 0 0 3px rgba(114, 92, 255, 0.1);
+}
+
+
+.input-box input:focus + label,
+.input-box input:not(:placeholder-shown) + label {
+    top: -9px;
+    left: 12px;
+
+    padding: 0 6px;
+
+    background: #151723;
+
+    color: #9b8fff;
+
+    font-size: 0.7rem;
+}
+
+
+/* =========================
+   OPTIONS
+========================= */
+
+.options {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    font-size: 0.75rem;
+}
+
+
+.options a {
+    color: #9b8fff;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+}
+
+
+.options a:hover {
+    color: #ffffff;
+}
+
+
+.remember {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #858998;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   SUBMIT BUTTON
+========================= */
+
+.submit-btn {
+    width: 100%;
+
+    height: 52px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #725cff;
+
+    color: #ffffff;
+
+    font-size: 0.95rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.3s,
+        box-shadow 0.3s;
+}
+
+
+.submit-btn::before {
+    content: "";
+
+    position: absolute;
+
+    width: 30px;
+    height: 100px;
+
+    top: -25px;
+    left: -50px;
+
+    background: rgba(255, 255, 255, 0.35);
+
+    transform: rotate(20deg);
+
+    transition: 0.5s;
+}
+
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(114, 92, 255, 0.35);
+}
+
+
+.submit-btn:hover::before {
+    left: 110%;
+}
+
+
+/* =========================
+   SWITCH TEXT
+========================= */
+
+.switch-text {
+    text-align: center;
+
+    color: #737687;
+
+    font-size: 0.8rem;
+
+    margin-top: 25px;
+}
+
+
+.switch-btn {
+    color: #9b8fff;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.switch-btn:hover {
+    color: #ffffff;
+
+    text-decoration: underline;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 520px) {
+
+    .page {
+        padding: 15px;
+    }
+
+    .auth-card {
+        width: 100%;
+
+        min-height: 620px;
+
+        padding: 35px 25px 30px;
+
+        border-radius: 20px;
+    }
+
+    .user-picture {
+        width: 95px;
+        height: 95px;
+    }
+
+    .form h1 {
+        font-size: 2.3rem;
+    }
+
+    .description {
+        margin-bottom: 25px;
+    }
+
+    .shape-three {
+        display: none;
+    }
+}
+
+    
+    </style>
+</head>
+
+<body>
+
+    <!-- Hidden CSS switch -->
+    <input type="checkbox" id="form-switch">
+
+
+    <!-- Decorative background shapes -->
+
+    <div class="shape shape-one"></div>
+    <div class="shape shape-two"></div>
+    <div class="shape shape-three"></div>
+
+
+    <main class="page">
+
+
+        <!-- =========================
+             AUTH CARD
+        ========================== -->
+
+        <div class="auth-card">
+
+
+            <!-- =========================
+                 SVG USER
+            ========================== -->
+
+            <div class="user-picture">
+
+                <svg
+                    viewBox="0 0 120 120"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-label="User icon"
+                >
+
+                    <!-- Outer circle -->
+
+                    <circle
+                        cx="60"
+                        cy="60"
+                        r="54"
+                        class="svg-circle"
+                    />
+
+
+                    <!-- Head -->
+
+                    <circle
+                        cx="60"
+                        cy="42"
+                        r="20"
+                        class="svg-head"
+                    />
+
+
+                    <!-- Body -->
+
+                    <path
+                        d="
+                        M27 101
+                        C29 78 42 67 60 67
+                        C78 67 91 78 93 101
+                        Z"
+                        class="svg-body"
+                    />
+
+
+                    <!-- Face highlight -->
+
+                    <circle
+                        cx="53"
+                        cy="35"
+                        r="4"
+                        class="svg-highlight"
+                    />
+
+                </svg>
+
+            </div>
+
+
+            <!-- =========================
+                 FORMS WRAPPER
+            ========================== -->
+
+            <div class="forms-wrapper">
+
+
+                <!-- =========================
+                     LOGIN
+                ========================== -->
+
+                <section class="form login-form">
+
+                    <span class="form-tag">
+                        Welcome back
+                    </span>
+
+                    <h1>
+                        Login
+                    </h1>
+
+                    <p class="description">
+                        Welcome back. Enter your details
+                        to continue.
+                    </p>
+
+
+                    <form>
+
+                        <div class="input-box">
+
+                            <input
+                                type="email"
+                                id="login-email"
+                                placeholder=" "
+                                required
+                            >
+
+                            <label for="login-email">
+                                Email Address
+                            </label>
+
+                        </div>
+
+
+                        <div class="input-box">
+
+                            <input
+                                type="password"
+                                id="login-password"
+                                placeholder=" "
+                                required
+                            >
+
+                            <label for="login-password">
+                                Password
+                            </label>
+
+                        </div>
+
+
+                        <div class="options">
+
+                            <label class="remember">
+
+                                <input type="checkbox">
+
+                                <span>
+                                    Remember me
+                                </span>
+
+                            </label>
+
+                            <a href="#">
+                                Forgot password?
+                            </a>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="submit-btn"
+                        >
+                            Login
+                        </button>
+
+                    </form>
+
+
+                    <p class="switch-text">
+
+                        Don't have an account?
+
+                        <label
+                            for="form-switch"
+                            class="switch-btn"
+                        >
+                            Sign Up
+                        </label>
+
+                    </p>
+
+                </section>
+
+
+
+                <!-- =========================
+                     SIGN UP
+                ========================== -->
+
+                <section class="form signup-form">
+
+                    <span class="form-tag">
+                        Join us
+                    </span>
+
+                    <h1>
+                        Sign Up
+                    </h1>
+
+                    <p class="description">
+                        Create your account and
+                        start something new.
+                    </p>
+
+
+                    <form>
+
+                        <div class="input-box">
+
+                            <input
+                                type="text"
+                                id="signup-name"
+                                placeholder=" "
+                                required
+                            >
+
+                            <label for="signup-name">
+                                Full Name
+                            </label>
+
+                        </div>
+
+
+                        <div class="input-box">
+
+                            <input
+                                type="email"
+                                id="signup-email"
+                                placeholder=" "
+                                required
+                            >
+
+                            <label for="signup-email">
+                                Email Address
+                            </label>
+
+                        </div>
+
+
+                        <div class="input-box">
+
+                            <input
+                                type="password"
+                                id="signup-password"
+                                placeholder=" "
+                                required
+                            >
+
+                            <label for="signup-password">
+                                Password
+                            </label>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="submit-btn"
+                        >
+                            Create Account
+                        </button>
+
+                    </form>
+
+
+                    <p class="switch-text">
+
+                        Already have an account?
+
+                        <label
+                            for="form-switch"
+                            class="switch-btn"
+                        >
+                            Login
+                        </label>
+
+                    </p>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
