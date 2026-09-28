@@ -1,0 +1,465 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Halfstep Sneakers — Shop</title>
+
+<!-- Google Fonts: Archivo for headings, Manrope for body text -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+  /* =========================================================
+     1. COLOURS + FONTS
+     All colours come from these variables. Change one value
+     here and the whole page updates.
+     ========================================================= */
+  :root{
+    --bg:        #eceff4;   /* page background          */
+    --surface:   #ffffff;   /* card background          */
+    --ink:       #0f1830;   /* main text                */
+    --ink-soft:  #526080;   /* muted text               */
+    --cobalt:    #2340ff;   /* brand blue               */
+    --cobalt-deep:#1830cc;  /* darker blue for hover    */
+    --signal:    #ff5b1f;   /* orange accent            */
+    --line:      #d3d9e4;   /* thin border              */
+
+    --font-display: "Archivo", "Arial Black", Arial, sans-serif;
+    --font-body:    "Manrope", Arial, sans-serif;
+  }
+
+  /* Automatic dark mode (follows the visitor's device setting) */
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:        #0b1120;
+      --surface:   #151d33;
+      --ink:       #eef1f8;
+      --ink-soft:  #9aa6c4;
+      --cobalt:    #4a63ff;
+      --cobalt-deep:#6f83ff;
+      --signal:    #ff7a45;
+      --line:      #27314d;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     2. GLOBAL RESET + BASE STYLES
+     --------------------------------------------------------- */
+  *{ box-sizing: border-box; }
+
+  html{
+    scroll-behavior: smooth;
+    scroll-padding-top: 72px;   /* keeps the sticky nav from covering anchors */
+  }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3{
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    line-height: 1.05;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  p{ margin: 0; }
+  a{ color: inherit; }
+
+  /* Reusable page-width container */
+  .wrap{
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Visible outline for keyboard users only */
+  :focus-visible{
+    outline: 2px solid var(--cobalt);
+    outline-offset: 3px;
+  }
+
+  /* ---------------------------------------------------------
+     3. NAVIGATION BAR (sticks to the top while scrolling)
+     --------------------------------------------------------- */
+  .site-nav{
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .site-nav .wrap{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  .brand{
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: 1.25rem;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .brand b{ color: var(--cobalt); }   /* the "step" half of "Halfstep" */
+
+  .nav-right{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .nav-links{
+    display: flex;
+    gap: 26px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .nav-links a{
+    text-decoration: none;
+    color: var(--ink-soft);
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+  }
+  .nav-links a:hover{
+    color: var(--ink);
+    border-bottom-color: var(--signal);
+  }
+
+  /* Buttons */
+  .btn{
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 13px 26px;
+    border-radius: 999px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    line-height: 1.2;
+  }
+  .btn-solid{ background: var(--cobalt); color: #fff; }
+  .btn-solid:hover{ background: var(--cobalt-deep); }
+  .btn-small{ padding: 9px 20px; font-size: 0.88rem; }
+
+  /* ---------------------------------------------------------
+     4. PRODUCTS SECTION
+     --------------------------------------------------------- */
+  .section{ padding: 64px 0; }
+
+  .section-head{ max-width: 52ch; margin-bottom: 44px; }
+  .section-head h2{
+    font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+    letter-spacing: -0.015em;
+  }
+  .section-head p{ margin-top: 14px; color: var(--ink-soft); }
+
+  /* The responsive grid — 3 columns on desktop */
+  .product-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .product{
+    display: flex;
+    flex-direction: column;   /* photo on top, text below */
+  }
+
+  /* The first card is bigger: it fills 2 columns and 2 rows */
+  .product.featured{
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  /* Photo box */
+  .panel{
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;         /* crops the photo to rounded corners */
+    min-height: 220px;
+    background: var(--surface);
+  }
+
+  .product:not(.featured) .panel{
+    flex: none;
+    height: 220px;
+  }
+
+  .product.featured .panel{
+    flex: 1;
+    min-height: 420px;
+  }
+
+  /* The stock photo itself */
+  .product-photo{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;        /* fills the box without squashing */
+    object-position: center;
+  }
+
+  /* Small label in the corner ("Bestseller", "New", etc.) */
+  .tag{
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 2;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+  }
+
+  .product-info{ padding: 16px 4px 0; }
+
+  .product-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .product-top h3{
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+  }
+
+  .price{
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    color: var(--cobalt-deep);
+  }
+
+  .colorway{
+    margin-top: 4px;
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+
+  .spec{
+    margin-top: 2px;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+
+  .sizes{
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  .reserve{
+    display: inline-block;
+    margin-top: 12px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--cobalt-deep);
+    text-decoration: none;
+    border-bottom: 2px solid var(--signal);
+    padding-bottom: 1px;
+  }
+  .reserve:hover{ color: var(--ink); }
+
+  /* ---------------------------------------------------------
+     5. RESPONSIVE RULES
+     Anything below only kicks in on narrower screens.
+     --------------------------------------------------------- */
+
+  /* Tablets and small laptops */
+  @media (max-width: 900px){
+    .product-grid{ grid-template-columns: 1fr 1fr; }
+    .product.featured{
+      grid-column: span 2;
+      grid-row: auto;           /* stop it stretching down 2 rows */
+    }
+    .product.featured .panel{ min-height: 300px; }
+  }
+
+  /* Phones */
+  @media (max-width: 620px){
+    .nav-right .btn{ display: none; }      /* hide the shop button */
+    .nav-links{ gap: 16px; font-size: 0.88rem; }
+
+    .section{ padding: 48px 0; }
+
+    .product-grid{ grid-template-columns: 1fr; }  /* one card per row */
+    .product.featured{ grid-column: auto; }
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- =========================================================
+       NAVIGATION
+       ========================================================= -->
+  <nav class="site-nav" aria-label="Main">
+    <div class="wrap">
+      <a class="brand" href="#home">Half<b>step</b></a>
+
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#products">Products</a></li>
+        </ul>
+        <a class="btn btn-solid btn-small" href="#products">Shop sneakers</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- =========================================================
+       PRODUCT CARDS
+       Each card is an <article>. To swap a photo, just change
+       the src="" on the <img> inside that card.
+       ========================================================= -->
+  <section id="products" class="section">
+    <div class="wrap">
+
+      <div class="section-head">
+        <h2>Shop the range</h2>
+        <p>Six pairs, all unisex, in US sizes 6 to 13 including half sizes.</p>
+      </div>
+
+      <div class="product-grid">
+
+        <!-- ---- Card 1: Signal Low (featured) ---- -->
+        <article class="product featured">
+          <div class="panel">
+            <span class="tag">Bestseller</span>
+            <img
+              class="product-photo"
+              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80"
+              alt="Signal Low sneaker in orange with a white sole"
+              loading="lazy">
+          </div>
+          <div class="product-info">
+            <div class="product-top"><h3>Signal Low</h3><span class="price">$118</span></div>
+            <p class="colorway">Signal orange with a white sole</p>
+            <p class="spec">Suede overlays and a light EVA midsole. Our most-worn pair.</p>
+            <p class="sizes">US 6 to 13</p>
+            <a class="reserve" href="#">Reserve a pair</a>
+          </div>
+        </article>
+
+        <!-- ---- Card 2: Cobalt Runner ---- -->
+        <article class="product">
+          <div class="panel">
+            <span class="tag">New</span>
+            <img
+              class="product-photo"
+              src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=800&q=80"
+              alt="Cobalt Runner sneaker in blue with a bone sole"
+              loading="lazy">
+          </div>
+          <div class="product-info">
+            <div class="product-top"><h3>Cobalt Runner</h3><span class="price">$128</span></div>
+            <p class="colorway">Cobalt with a bone sole</p>
+            <p class="spec">Recycled knit upper with a cushioned midsole.</p>
+            <a class="reserve" href="#">Reserve a pair</a>
+          </div>
+        </article>
+
+        <!-- ---- Card 3: Bone Court ---- -->
+        <article class="product">
+          <div class="panel">
+            <img
+              class="product-photo"
+              src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80"
+              alt="Bone Court sneaker in off-white with navy details"
+              loading="lazy">
+          </div>
+          <div class="product-info">
+            <div class="product-top"><h3>Bone Court</h3><span class="price">$110</span></div>
+            <p class="colorway">Bone with navy details</p>
+            <p class="spec">Leather upper on a stitched court sole.</p>
+            <a class="reserve" href="#">Reserve a pair</a>
+          </div>
+        </article>
+
+        <!-- ---- Card 4: Forest Trail ---- -->
+        <article class="product">
+          <div class="panel">
+            <span class="tag">Water-resistant</span>
+            <img
+              class="product-photo"
+              src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80"
+              alt="Forest Trail sneaker in green with a sand sole"
+              loading="lazy">
+          </div>
+          <div class="product-info">
+            <div class="product-top"><h3>Forest Trail</h3><span class="price">$138</span></div>
+            <p class="colorway">Forest green with a sand sole</p>
+            <p class="spec">Deep-lug outsole for wet pavements and park paths.</p>
+            <a class="reserve" href="#">Reserve a pair</a>
+          </div>
+        </article>
+
+        <!-- ---- Card 5: Night Shift ---- -->
+        <article class="product">
+          <div class="panel">
+            <img
+              class="product-photo"
+              src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=80"
+              alt="Night Shift sneaker in navy with a white sole"
+              loading="lazy">
+          </div>
+          <div class="product-info">
+            <div class="product-top"><h3>Night Shift</h3><span class="price">$124</span></div>
+            <p class="colorway">Navy with a white sole</p>
+            <p class="spec">Reflective heel tab for evening walks and commutes.</p>
+            <a class="reserve" href="#">Reserve a pair</a>
+          </div>
+        </article>
+
+        <!-- ---- Card 6: Slate Daily ---- -->
+        <article class="product">
+          <div class="panel">
+            <img
+              class="product-photo"
+              src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=800&q=80"
+              alt="Slate Daily sneaker in grey with a white sole"
+              loading="lazy">
+          </div>
+          <div class="product-info">
+            <div class="product-top"><h3>Slate Daily</h3><span class="price">$105</span></div>
+            <p class="colorway">Slate grey with a white sole</p>
+            <p class="spec">Machine-washable knit for everyday wear.</p>
+            <a class="reserve" href="#">Reserve a pair</a>
+          </div>
+        </article>
+
+      </div><!-- /.product-grid -->
+    </div>
+  </section>
+
+</body>
+</html>
