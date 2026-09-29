@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sugar Shelf | Sweets, Chocolates, Desserts & Cold Drinks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------- 1. Colours and fonts live here so they're easy to change ---------- */
+    :root {
+      --cocoa: #3a2019;
+      --caramel: #e0963b;
+      --mint: #d3eee0;
+      --butter: #fff3b8;
+      --card: #fffdf8;
+      --text: #3a2019;
+      --muted: #7a5a50;
+
+      --font-display: "Bagel Fat One", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+      --font-body: "Nunito", "Segoe UI", Arial, sans-serif;
+    }
+
+    /* ---------- 2. Basic reset ---------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 70px; /* stops the sticky nav covering section titles */
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--text);
+      background: var(--card);
+      line-height: 1.6;
+    }
+
+    a:focus-visible {
+      outline: 3px solid var(--caramel);
+      outline-offset: 3px;
+    }
+
+    /* ---------- 3. Navigation ---------- */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      padding: 12px 6%;
+      background: var(--cocoa);
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--butter);
+      text-decoration: none;
+    }
+
+    .nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 22px;
+      list-style: none;
+    }
+
+    .nav ul a {
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .nav ul a:hover {
+      color: var(--caramel);
+    }
+
+    /* ---------- 4. Hero ---------- */
+    .hero {
+      padding: 80px 6% 70px;
+      background: var(--butter);
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(2.6rem, 8vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--cocoa);
+    }
+
+    .hero p {
+      max-width: 46ch;
+      margin: 18px auto 28px;
+      font-size: 1.15rem;
+      color: var(--muted);
+    }
+
+    .hero-emojis {
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      letter-spacing: 0.3em;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 999px;
+      background: var(--cocoa);
+      color: #fff;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background: var(--caramel);
+      color: var(--cocoa);
+    }
+
+    /* ---------- 5. Menu sections ---------- */
+    .section {
+      padding: 70px 6%;
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(2rem, 5vw, 3rem);
+      text-align: center;
+    }
+
+    .section .intro {
+      max-width: 50ch;
+      margin: 8px auto 40px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    /* Each section gets its own background colour */
+    .chocolates { background: var(--card); }
+    .sweets     { background: var(--mint); }
+    .desserts   { background: var(--butter); }
+
+    /* The drinks section is dark, so it stands out from the rest */
+    .drinks {
+      background: var(--cocoa);
+      color: #fff;
+    }
+    .drinks .intro { color: #e8cfc4; }
+
+    /* ---------- 6. Item cards ---------- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      padding: 26px 22px;
+      border-radius: 20px;
+      background: var(--card);
+      color: var(--text);
+      border: 2px solid var(--cocoa);
+      transition: transform 0.2s;
+    }
+
+    .item:hover {
+      transform: translateY(-5px);
+    }
+
+    .emoji {
+      font-size: 3.2rem;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .item h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .item p {
+      flex-grow: 1; /* pushes the price to the bottom of every card */
+      margin: 4px 0 14px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .price {
+      font-weight: 800;
+      color: var(--cocoa);
+    }
+
+    .price::before {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 8px;
+      border-radius: 50%;
+      background: var(--caramel);
+    }
+
+    /* ---------- 7. Footer ---------- */
+    .footer {
+      padding: 40px 6%;
+      background: #241009;
+      color: #e8cfc4;
+      text-align: center;
+    }
+
+    .footer strong {
+      display: block;
+      margin-bottom: 4px;
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 1.4rem;
+      color: var(--butter);
+    }
+
+    /* ---------- 8. Respect people who turn animations off ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .item { transition: none; }
+      .item:hover { transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <header class="nav">
+    <a class="logo" href="#top">Sugar Shelf</a>
+    <nav>
+      <ul>
+        <li><a href="#chocolates">Chocolates</a></li>
+        <li><a href="#sweets">Sweets</a></li>
+        <li><a href="#desserts">Desserts</a></li>
+        <li><a href="#drinks">Cold drinks</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-emojis" aria-hidden="true">🍫 🍰 🍭 🥤</div>
+      <h1>Everything sweet, all in one shelf</h1>
+      <p>Chocolates, candy, cakes and ice-cold shakes. Pick a favourite or try something new.</p>
+      <a class="button" href="#chocolates">See the menu</a>
+    </section>
+
+    <!-- Chocolates -->
+    <section class="section chocolates" id="chocolates">
+      <h2>Chocolates</h2>
+      <p class="intro">Handmade in small batches, from bitter dark to creamy milk.</p>
+      <div class="grid">
+        <article class="item">
+          <div class="emoji">🍫</div>
+          <h3>Dark chocolate bar</h3>
+          <p>70% cocoa, deep and slightly bitter.</p>
+          <span class="price">$4.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🤎</div>
+          <h3>Hazelnut truffles</h3>
+          <p>Soft ganache centre rolled in cocoa powder.</p>
+          <span class="price">$7.00</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍓</div>
+          <h3>Dipped strawberries</h3>
+          <p>Fresh berries coated in melted milk chocolate.</p>
+          <span class="price">$8.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🥜</div>
+          <h3>Peanut butter cups</h3>
+          <p>Milk chocolate shells with a salty-sweet middle.</p>
+          <span class="price">$5.00</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍯</div>
+          <h3>Salted caramel bonbons</h3>
+          <p>Gooey caramel inside a thin chocolate shell.</p>
+          <span class="price">$6.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🤍</div>
+          <h3>White chocolate bark</h3>
+          <p>Crunchy pistachios and dried raspberries on top.</p>
+          <span class="price">$6.00</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- Sweets -->
+    <section class="section sweets" id="sweets">
+      <h2>Sweets &amp; candy</h2>
+      <p class="intro">Chewy, crunchy, sour and fruity. Perfect for sharing or not.</p>
+      <div class="grid">
+        <article class="item">
+          <div class="emoji">🍭</div>
+          <h3>Swirl lollipops</h3>
+          <p>Big rainbow lollipops in fruit flavours.</p>
+          <span class="price">$2.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🐻</div>
+          <h3>Gummy bears</h3>
+          <p>Soft, chewy and made with real fruit juice.</p>
+          <span class="price">$3.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍬</div>
+          <h3>Wrapped toffees</h3>
+          <p>Buttery toffee that melts slowly.</p>
+          <span class="price">$3.00</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍡</div>
+          <h3>Cotton candy</h3>
+          <p>Spun fresh, in pink and blue.</p>
+          <span class="price">$4.00</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍪</div>
+          <h3>Macarons</h3>
+          <p>Crisp shells with a soft filling. Box of six.</p>
+          <span class="price">$9.00</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍿</div>
+          <h3>Caramel popcorn</h3>
+          <p>Crunchy, golden and coated in caramel.</p>
+          <span class="price">$4.50</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- Desserts -->
+    <section class="section desserts" id="desserts">
+      <h2>Desserts</h2>
+      <p class="intro">Baked fresh every morning and served by the slice.</p>
+      <div class="grid">
+        <article class="item">
+          <div class="emoji">🍰</div>
+          <h3>Strawberry cheesecake</h3>
+          <p>Creamy filling on a buttery biscuit base.</p>
+          <span class="price">$6.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🧁</div>
+          <h3>Vanilla cupcake</h3>
+          <p>Fluffy sponge with swirled buttercream.</p>
+          <span class="price">$3.75</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍩</div>
+          <h3>Glazed donuts</h3>
+          <p>Soft, warm and topped with sprinkles.</p>
+          <span class="price">$2.75</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍨</div>
+          <h3>Ice cream sundae</h3>
+          <p>Three scoops, hot fudge and a cherry.</p>
+          <span class="price">$7.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🎂</div>
+          <h3>Chocolate fudge cake</h3>
+          <p>Three layers, rich and very moist.</p>
+          <span class="price">$6.00</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🥧</div>
+          <h3>Apple pie</h3>
+          <p>Warm cinnamon apples under a flaky crust.</p>
+          <span class="price">$5.50</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- Cold drinks -->
+    <section class="section drinks" id="drinks">
+      <h2>Cold drinks</h2>
+      <p class="intro">Thick shakes and fruity coolers, served over ice.</p>
+      <div class="grid">
+        <article class="item">
+          <div class="emoji">🥤</div>
+          <h3>Chocolate shake</h3>
+          <p>Thick and creamy, topped with whipped cream.</p>
+          <span class="price">$5.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍓</div>
+          <h3>Strawberry milkshake</h3>
+          <p>Blended with fresh strawberries and vanilla ice cream.</p>
+          <span class="price">$5.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍪</div>
+          <h3>Cookies &amp; cream shake</h3>
+          <p>Crushed chocolate cookies in every sip.</p>
+          <span class="price">$6.00</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🧋</div>
+          <h3>Iced mocha</h3>
+          <p>Cold coffee mixed with chocolate and milk.</p>
+          <span class="price">$4.75</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🥭</div>
+          <h3>Mango lassi</h3>
+          <p>Yogurt and ripe mango, lightly sweet.</p>
+          <span class="price">$4.50</span>
+        </article>
+        <article class="item">
+          <div class="emoji">🍋</div>
+          <h3>Fresh lemonade</h3>
+          <p>Squeezed to order with mint and lots of ice.</p>
+          <span class="price">$3.50</span>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <strong>Sugar Shelf</strong>
+    <p>Open every day, 10am to 10pm. Sweet things taste better shared.</p>
+  </footer>
+
+</body>
+</html>
