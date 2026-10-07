@@ -1,0 +1,683 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sweet Crumb · Baking Recipes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ---------- Design tokens ---------- */
+  :root {
+    --cream:      #fffaf3;
+    --cream-2:    #fdf1e3;
+    --crust:      #c98a4b;
+    --crust-dark: #a86a30;
+    --cocoa:      #4a3226;
+    --cocoa-soft: #7a6353;
+    --berry:      #d96a7c;
+    --line:       #ecdcc9;
+    --white:      #ffffff;
+    --shadow-sm:  0 2px 8px rgba(74, 50, 38, .06);
+    --shadow-md:  0 10px 30px rgba(74, 50, 38, .10);
+    --shadow-lg:  0 20px 50px rgba(74, 50, 38, .16);
+    --radius:     18px;
+  }
+
+  /* ---------- Reset ---------- */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background:
+      radial-gradient(900px 500px at 10% -10%, #ffe9d2 0%, transparent 60%),
+      radial-gradient(800px 500px at 95% 5%, #ffe2e6 0%, transparent 55%),
+      var(--cream);
+    color: var(--cocoa);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Layout helper ---------- */
+  .wrap {
+    width: min(1080px, 92vw);
+    margin-inline: auto;
+  }
+
+  /* ---------- Navigation ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    background: rgba(255, 250, 243, .82);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: var(--cocoa);
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .logo span { color: var(--berry); }
+
+  .nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .nav a {
+    text-decoration: none;
+    color: var(--cocoa-soft);
+    font-size: .93rem;
+    font-weight: 500;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+    transition: color .25s, border-color .25s;
+  }
+
+  .nav a:hover {
+    color: var(--crust-dark);
+    border-bottom-color: var(--crust);
+  }
+
+  /* ---------- Home / Hero ---------- */
+  .hero {
+    padding: 5.5rem 0 4.5rem;
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+
+  .tagline {
+    display: inline-block;
+    background: var(--white);
+    border: 1px solid var(--line);
+    color: var(--crust-dark);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    padding: .45rem 1rem;
+    border-radius: 999px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1.4rem;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.3rem, 5.5vw, 3.6rem);
+    line-height: 1.12;
+    font-weight: 700;
+    letter-spacing: -.5px;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--crust);
+    position: relative;
+  }
+
+  .hero h1 em::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: .08em;
+    height: .28em;
+    background: rgba(217, 106, 124, .22);
+    border-radius: 999px;
+    z-index: -1;
+  }
+
+  .hero p {
+    color: var(--cocoa-soft);
+    font-size: 1.05rem;
+    max-width: 46ch;
+    margin-bottom: 2rem;
+  }
+
+  .btn-row { display: flex; gap: .9rem; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    font-weight: 600;
+    padding: .85rem 1.9rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .25s, background .25s, color .25s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--crust) 0%, var(--crust-dark) 100%);
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(168, 106, 48, .32);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 30px rgba(168, 106, 48, .38);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--cocoa);
+    border: 1.5px solid var(--line);
+  }
+
+  .btn-ghost:hover {
+    background: var(--white);
+    border-color: var(--crust);
+    color: var(--crust-dark);
+    transform: translateY(-3px);
+  }
+
+  /* Decorative "cake" card in hero */
+  .hero-art {
+    aspect-ratio: 1 / 1;
+    border-radius: 50% 50% 46% 46% / 55% 55% 45% 45%;
+    background:
+      radial-gradient(circle at 50% 30%, #ffe7c9 0%, #f7cfa4 55%, #e8b47c 100%);
+    box-shadow: var(--shadow-lg), inset 0 -18px 40px rgba(168, 106, 48, .18);
+    display: grid;
+    place-items: center;
+    font-size: clamp(4rem, 12vw, 7rem);
+    position: relative;
+  }
+
+  .hero-art::before,
+  .hero-art::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .55);
+  }
+  .hero-art::before { width: 22px; height: 22px; top: 14%; left: 18%; }
+  .hero-art::after  { width: 12px; height: 12px; top: 26%; left: 12%; }
+
+  /* ---------- Section headings ---------- */
+  section { padding: 3.5rem 0; }
+
+  .sec-head {
+    text-align: center;
+    margin-bottom: 2.6rem;
+  }
+
+  .sec-head h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.7rem, 3.6vw, 2.3rem);
+    font-weight: 700;
+    letter-spacing: -.3px;
+  }
+
+  .sec-head p {
+    color: var(--cocoa-soft);
+    font-size: .95rem;
+    max-width: 54ch;
+    margin: .6rem auto 0;
+  }
+
+  .sec-head::after {
+    content: '';
+    display: block;
+    width: 62px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--crust), var(--berry));
+    margin: 1.1rem auto 0;
+  }
+
+  /* ---------- Card container ---------- */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  /* ---------- Tables ---------- */
+  .table-scroll { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 560px;
+    font-size: .93rem;
+  }
+
+  thead th {
+    background: linear-gradient(135deg, #fdf1e3 0%, #fbe6e6 100%);
+    color: var(--cocoa);
+    font-weight: 600;
+    font-size: .8rem;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 1.05rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #f5ece1;
+    color: var(--cocoa-soft);
+  }
+
+  tbody td:first-child {
+    color: var(--cocoa);
+    font-weight: 500;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr { transition: background .22s; }
+  tbody tr:hover { background: #fffaf2; }
+
+  /* Difficulty pills */
+  .pill {
+    display: inline-block;
+    font-size: .74rem;
+    font-weight: 600;
+    letter-spacing: .4px;
+    padding: .25rem .75rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .pill.easy   { background: #e4f5e6; color: #3f7d4b; }
+  .pill.medium { background: #fdf0d8; color: #a2701d; }
+  .pill.hard   { background: #fce4e7; color: #b33b50; }
+
+  /* Two tables side by side on wide screens */
+  .table-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.12rem;
+    font-weight: 600;
+    padding: 1.2rem 1.25rem .9rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+  }
+
+  /* ---------- Form ---------- */
+  .form-card {
+    max-width: 760px;
+    margin-inline: auto;
+    padding: 2.6rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.35rem;
+  }
+
+  .field { display: flex; flex-direction: column; gap: .45rem; }
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: var(--cocoa-soft);
+  }
+
+  input[type="text"],
+  input[type="email"],
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--cocoa);
+    background: var(--cream);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    width: 100%;
+    transition: border-color .22s, box-shadow .22s, background .22s;
+  }
+
+  textarea { resize: vertical; min-height: 120px; }
+
+  input::placeholder, textarea::placeholder { color: #b8a595; }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    background: var(--white);
+    border-color: var(--crust);
+    box-shadow: 0 0 0 4px rgba(201, 138, 75, .14);
+  }
+
+  /* Radio group */
+  .radio-row {
+    display: flex;
+    gap: 1.4rem;
+    flex-wrap: wrap;
+    padding: .35rem 0;
+  }
+
+  .radio-row label {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: .92rem;
+    font-weight: 400;
+    color: var(--cocoa-soft);
+    cursor: pointer;
+  }
+
+  input[type="radio"], input[type="checkbox"] {
+    accent-color: var(--crust);
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: .65rem;
+    font-size: .9rem;
+    color: var(--cocoa-soft);
+  }
+
+  .check-row label {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: .9rem;
+    cursor: pointer;
+  }
+
+  .form-actions {
+    margin-top: 1.9rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .form-actions .btn { padding: .95rem 2.6rem; }
+
+  .hint { font-size: .82rem; color: #a3907f; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-top: 3rem;
+    padding: 2.6rem 0;
+    border-top: 1px solid var(--line);
+    background: rgba(255, 255, 255, .55);
+    text-align: center;
+    font-size: .87rem;
+    color: var(--cocoa-soft);
+  }
+
+  footer strong { color: var(--cocoa); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding-top: 3.5rem; text-align: center; }
+    .hero p { margin-inline: auto; }
+    .btn-row { justify-content: center; }
+    .hero-art { max-width: 320px; margin-inline: auto; }
+    .table-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 620px) {
+    .nav { justify-content: center; }
+    .nav ul { gap: 1.1rem; justify-content: center; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-card { padding: 1.7rem; }
+    section { padding: 2.6rem 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ================= NAV ================= -->
+  <header>
+    <div class="wrap nav">
+      <div class="logo">🧁 Sweet<span>Crumb</span></div>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#recipes">Recipes</a></li>
+          <li><a href="#measures">Measures</a></li>
+          <li><a href="#share">Share Yours</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= HOME ================= -->
+  <main>
+    <section id="home" class="wrap hero">
+      <div>
+        <span class="tagline">Fresh from the oven</span>
+        <h1>Bake something <em>beautiful</em> today.</h1>
+        <p>
+          Simple, foolproof recipes for every kind of baker — from your first
+          batch of chocolate chip cookies to a slow-risen sourdough loaf.
+          No fancy equipment, just butter, flour, and a little patience.
+        </p>
+        <div class="btn-row">
+          <a href="#recipes" class="btn btn-primary">Browse Recipes</a>
+          <a href="#share" class="btn btn-ghost">Share a Recipe</a>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">🍰</div>
+    </section>
+
+    <!-- ================= RECIPES + MEASURES ================= -->
+    <section id="recipes" class="wrap">
+      <div class="sec-head">
+        <h2>Our Favourite Bakes</h2>
+        <p>A little guide to what you're getting into before you preheat the oven.</p>
+      </div>
+
+      <div class="table-grid">
+
+        <!-- Recipe table -->
+        <div class="card">
+          <h3 class="card-title">📖 Recipe Guide</h3>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Recipe</th>
+                  <th>Difficulty</th>
+                  <th>Prep</th>
+                  <th>Bake</th>
+                  <th>Serves</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Chocolate Chip Cookies</td>
+                  <td><span class="pill easy">Easy</span></td>
+                  <td>15 min</td>
+                  <td>12 min</td>
+                  <td>24</td>
+                </tr>
+                <tr>
+                  <td>Classic Banana Bread</td>
+                  <td><span class="pill easy">Easy</span></td>
+                  <td>20 min</td>
+                  <td>60 min</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>Lemon Drizzle Cake</td>
+                  <td><span class="pill medium">Medium</span></td>
+                  <td>25 min</td>
+                  <td>45 min</td>
+                  <td>10</td>
+                </tr>
+                <tr>
+                  <td>Apple Crumble Pie</td>
+                  <td><span class="pill medium">Medium</span></td>
+                  <td>35 min</td>
+                  <td>50 min</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>Rustic Sourdough Loaf</td>
+                  <td><span class="pill hard">Hard</span></td>
+                  <td>30 min</td>
+                  <td>40 min</td>
+                  <td>12</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Measures table -->
+        <div class="card" id="measures">
+          <h3 class="card-title">⚖️ Handy Measures</h3>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ingredient</th>
+                  <th>Volume</th>
+                  <th>Weight</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Plain flour</td><td>1 cup</td><td>125 g</td></tr>
+                <tr><td>Caster sugar</td><td>1 cup</td><td>200 g</td></tr>
+                <tr><td>Butter</td><td>1 cup</td><td>227 g</td></tr>
+                <tr><td>Cocoa powder</td><td>1 cup</td><td>85 g</td></tr>
+                <tr><td>Teaspoon</td><td>1 tsp</td><td>5 ml</td></tr>
+                <tr><td>Tablespoon</td><td>1 tbsp</td><td>15 ml</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= FORM ================= -->
+    <section id="share" class="wrap">
+      <div class="sec-head">
+        <h2>Share Your Recipe</h2>
+        <p>Got a family favourite? Send it over and we might feature it on the site.</p>
+      </div>
+
+      <form class="form-card" action="#" method="post">
+        <div class="form-grid">
+
+          <div class="field">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="e.g. Amelia Baker" required />
+          </div>
+
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required />
+          </div>
+
+          <div class="field">
+            <label for="recipe">Recipe Name</label>
+            <input type="text" id="recipe" name="recipe" placeholder="e.g. Cinnamon Swirl Buns" required />
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+            <select id="category" name="category">
+              <option value="cakes">Cakes &amp; Cupcakes</option>
+              <option value="cookies">Cookies &amp; Biscuits</option>
+              <option value="bread">Breads &amp; Doughs</option>
+              <option value="pastry">Pastries &amp; Pies</option>
+              <option value="other">Something Else</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label>Difficulty</label>
+            <div class="radio-row">
+              <label><input type="radio" name="difficulty" value="easy" checked /> Easy</label>
+              <label><input type="radio" name="difficulty" value="medium" /> Medium</label>
+              <label><input type="radio" name="difficulty" value="hard" /> Challenging</label>
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="ingredients">Ingredients &amp; Method</label>
+            <textarea id="ingredients" name="ingredients"
+              placeholder="List your ingredients, then the steps..."></textarea>
+          </div>
+
+          <div class="field full">
+            <div class="check-row">
+              <input type="checkbox" id="consent" name="consent" required />
+              <label for="consent">
+                I'm happy for Sweet Crumb to publish this recipe with my first name.
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Send Recipe</button>
+          <span class="hint">We read every submission — thank you! 🧡</span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="wrap">
+      <p><strong>Sweet Crumb</strong> · Baked with butter &amp; love since 2024</p>
+      <p>Made for people who lick the spoon. 🥄</p>
+    </div>
+  </footer>
+
+</body>
+</html>
