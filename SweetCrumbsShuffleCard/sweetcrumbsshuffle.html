@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sweet Crumb · Shuffle the Mood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ================= TOKENS ================= */
+  :root {
+    --cocoa:      #4a3226;
+    --cocoa-soft: #7a6353;
+    --crust:      #c98a4b;
+    --line:       #ecdcc9;
+    --panel:      rgba(255, 255, 255, .74);
+    --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+    --ease-deal:   cubic-bezier(.5, 0, .75, .35);
+    --deal-time:   .75s;
+  }
+
+  /* ================= RESET ================= */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    color: var(--cocoa);
+    line-height: 1.65;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    /* Fallback colour before JS injects the deck */
+    background: linear-gradient(160deg, #fffaf3, #ffe9d2);
+  }
+
+  /* ================= BACKGROUND DECK ================= */
+  .bg-deck {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .bg-card {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, var(--c1), var(--c2));
+    transform-origin: 50% 90%;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+
+  /* Top card gets dealt off the deck */
+  @keyframes dealAway {
+    0%   { transform: translate(0, 0) rotate(0deg) scale(1);        opacity: 1; }
+    30%  { transform: translate(-5%, -6%) rotate(-2.5deg) scale(1); opacity: 1; }
+    100% { transform: translate(-46%, -118%) rotate(-15deg) scale(.88); opacity: 0; }
+  }
+
+  /* Next card rises into place with a soft spring */
+  @keyframes riseUp {
+    0%   { transform: translateY(24px) scale(.955); opacity: .55; }
+    55%  { opacity: 1; }
+    100% { transform: translateY(0) scale(1);       opacity: 1; }
+  }
+
+  .bg-card.dealing {
+    z-index: 999 !important;
+    animation: dealAway var(--deal-time) var(--ease-deal) forwards;
+  }
+
+  .bg-card.rising {
+    animation: riseUp .7s var(--ease-spring) .06s both;
+  }
+
+  /* ================= STAGE ================= */
+  .stage {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 3rem 1.25rem;
+  }
+
+  /* ================= PANEL ================= */
+  .panel {
+    width: min(620px, 100%);
+    padding: 3rem 2.6rem 2.6rem;
+    text-align: center;
+    border-radius: 30px;
+    background: var(--panel);
+    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, .85);
+    box-shadow:
+      0 34px 70px rgba(74, 50, 38, .16),
+      0 2px 0 rgba(255, 255, 255, .7) inset;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--crust);
+    background: rgba(255, 255, 255, .8);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: .4rem 1rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .panel h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 2.9rem);
+    font-weight: 700;
+    line-height: 1.14;
+    letter-spacing: -.5px;
+    margin-bottom: .9rem;
+  }
+
+  .panel h1 em {
+    font-style: normal;
+    color: var(--crust);
+  }
+
+  .panel > p {
+    color: var(--cocoa-soft);
+    font-size: .97rem;
+    max-width: 42ch;
+    margin: 0 auto 2rem;
+  }
+
+  /* ================= THEME READOUT ================= */
+  .readout {
+    display: inline-flex;
+    align-items: center;
+    gap: .7rem;
+    background: rgba(255, 255, 255, .82);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: .5rem .6rem .5rem .55rem;
+    margin-bottom: 1.8rem;
+    box-shadow: 0 3px 10px rgba(74, 50, 38, .07);
+  }
+
+  .readout-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 9px;
+    background: linear-gradient(160deg, #fffaf3, #ffe9d2);
+    box-shadow: 0 2px 6px rgba(74, 50, 38, .18);
+    flex-shrink: 0;
+    transition: background .6s ease;
+  }
+
+  .readout-name {
+    font-size: .88rem;
+    font-weight: 600;
+    letter-spacing: .2px;
+    min-width: 8.5rem;
+    text-align: left;
+  }
+
+  .readout-name.swap { animation: nameSwap .5s ease both; }
+
+  @keyframes nameSwap {
+    0%   { opacity: 0; transform: translateY(7px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .readout-count {
+    font-size: .74rem;
+    font-weight: 600;
+    letter-spacing: .5px;
+    color: var(--cocoa-soft);
+    background: rgba(236, 220, 201, .55);
+    border-radius: 999px;
+    padding: .25rem .65rem;
+    flex-shrink: 0;
+  }
+
+  /* ================= DECK BUTTON ================= */
+  .deck-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: .95rem;
+    padding: 1rem 2.3rem 1rem 1.7rem;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(150deg, #523728 0%, #2d1d15 100%);
+    color: #fff5e9;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .3px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow:
+      0 16px 30px rgba(74, 50, 38, .3),
+      0 1px 0 rgba(255, 255, 255, .16) inset;
+    transition: transform .3s var(--ease-spring), box-shadow .3s ease;
+  }
+
+  .deck-btn:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 22px 40px rgba(74, 50, 38, .36),
+      0 1px 0 rgba(255, 255, 255, .16) inset;
+  }
+
+  .deck-btn:active { transform: translateY(0) scale(.975); }
+
+  .deck-btn:focus-visible {
+    outline: 3px solid var(--crust);
+    outline-offset: 4px;
+  }
+
+  /* Mini card stack inside the button */
+  .deck-stack {
+    position: relative;
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+
+  .mini {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    background: linear-gradient(150deg, #ffd9a8, #e8a86a);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .25);
+    transition:
+      transform .45s var(--ease-spring),
+      opacity .3s ease;
+  }
+
+  .mini:nth-child(1) { z-index: 3; transform: translate(0, 0) rotate(-5deg); }
+  .mini:nth-child(2) { z-index: 2; transform: translate(3px, 3px) rotate(1deg);
+                       background: linear-gradient(150deg, #ffc2cb, #e88a9c); }
+  .mini:nth-child(3) { z-index: 1; transform: translate(6px, 6px) rotate(7deg);
+                       background: linear-gradient(150deg, #c9e6c0, #8fc98a); }
+
+  .deck-btn:hover .mini:nth-child(1) { transform: translate(-7px, -3px) rotate(-16deg); }
+  .deck-btn:hover .mini:nth-child(2) { transform: translate(1px, 1px) rotate(1deg); }
+  .deck-btn:hover .mini:nth-child(3) { transform: translate(10px, 4px) rotate(18deg); }
+
+  @keyframes miniDeal {
+    0%   { transform: translate(0, 0) rotate(-5deg);   opacity: 1; }
+    100% { transform: translate(-16px, -20px) rotate(-46deg); opacity: 0; }
+  }
+
+  .deck-btn.is-shuffling .mini:nth-child(1) {
+    animation: miniDeal .5s var(--ease-deal) forwards;
+  }
+
+  /* ================= CHIPS ================= */
+  .chips {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-top: 1.9rem;
+  }
+
+  .chip {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 2px solid rgba(255, 255, 255, .95);
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 3px 9px rgba(74, 50, 38, .16);
+    transition: transform .35s var(--ease-spring), box-shadow .3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .chip:hover {
+    transform: translateY(-5px) scale(1.08);
+    box-shadow: 0 8px 16px rgba(74, 50, 38, .24);
+  }
+
+  .chip.active {
+    transform: translateY(-4px) scale(1.1);
+    box-shadow: 0 8px 16px rgba(74, 50, 38, .26);
+  }
+
+  .chip.active::after {
+    content: '';
+    position: absolute;
+    inset: -7px;
+    border-radius: 15px;
+    border: 2px solid var(--crust);
+    animation: ringIn .4s var(--ease-spring) both;
+  }
+
+  @keyframes ringIn {
+    0%   { opacity: 0; transform: scale(.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .chip:focus-visible {
+    outline: 3px solid var(--crust);
+    outline-offset: 5px;
+  }
+
+  /* ================= FOOTER NOTE ================= */
+  .note {
+    margin-top: 2rem;
+    font-size: .78rem;
+    color: var(--cocoa-soft);
+    opacity: .85;
+  }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width: 560px) {
+    .panel { padding: 2.2rem 1.5rem 2rem; border-radius: 24px; }
+    .deck-btn { padding: .95rem 1.8rem .95rem 1.4rem; font-size: .95rem; }
+    .readout-name { min-width: 7rem; font-size: .82rem; }
+  }
+
+  /* ================= REDUCED MOTION ================= */
+  @media (prefers-reduced-motion: reduce) {
+    .bg-card,
+    .mini,
+    .chip,
+    .deck-btn {
+      transition-duration: .01ms !important;
+      animation-duration: .01ms !important;
+    }
+    .bg-card.dealing { animation: none !important; opacity: 0; }
+    .bg-card.rising  { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Layer of colour cards that live behind everything -->
+  <div class="bg-deck" id="deck" aria-hidden="true"></div>
+
+  <main class="stage">
+    <section class="panel">
+
+      <span class="eyebrow">Baking themes</span>
+
+      <h1>Shuffle the <em>mood</em></h1>
+
+      <p>
+        Tap the deck to deal a fresh colour across the page — just like
+        flipping the top card off a well-worn recipe box.
+      </p>
+
+      <div class="readout">
+        <span class="readout-dot" id="readoutDot"></span>
+        <span class="readout-name" id="readoutName">Vanilla Cream</span>
+        <span class="readout-count" id="readoutCount">1 / 6</span>
+      </div>
+
+      <div>
+        <button class="deck-btn" id="shuffleBtn" type="button">
+          <span class="deck-stack" aria-hidden="true">
+            <span class="mini"></span>
+            <span class="mini"></span>
+            <span class="mini"></span>
+          </span>
+          <span class="deck-label">Shuffle</span>
+        </button>
+      </div>
+
+      <div class="chips" id="chips"></div>
+
+      <p class="note">Six flavours · infinite moods</p>
+
+    </section>
+  </main>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- The deck: one entry per colour card ---------- */
+  const THEMES = [
+    { name: 'Vanilla Cream',      c1: '#fffaf3', c2: '#ffe9d2' },
+    { name: 'Strawberry Frosting',c1: '#ffeef1', c2: '#ffc4d1' },
+    { name: 'Salted Caramel',     c1: '#fdf1e3', c2: '#f2c78f' },
+    { name: 'Pistachio',          c1: '#eef7ea', c2: '#bde0b4' },
+    { name: 'Blueberry Glaze',    c1: '#eef1fb', c2: '#c3d0f0' },
+    { name: 'Dark Chocolate',     c1: '#f4ebe4', c2: '#d3ab8c' }
+  ];
+
+  /* ---------- Element refs ---------- */
+  const deckEl      = document.getElementById('deck');
+  const shuffleBtn  = document.getElementById('shuffleBtn');
+  const chipsEl     = document.getElementById('chips');
+  const readoutDot  = document.getElementById('readoutDot');
+  const readoutName = document.getElementById('readoutName');
+  const readoutCount= document.getElementById('readoutCount');
+
+  const DEAL_MS = 780;   // keep in sync with --deal-time + a hair
+
+  /* ---------- Build the background cards ---------- */
+  const cards = THEMES.map(theme => {
+    const el = document.createElement('div');
+    el.className = 'bg-card';
+    el.style.setProperty('--c1', theme.c1);
+    el.style.setProperty('--c2', theme.c2);
+    deckEl.appendChild(el);
+    return el;
+  });
+
+  let top = 0;          // index of the card currently on top
+  let busy = false;     // guards against overlapping shuffles
+
+  /* ---------- Build the colour chips ---------- */
+  const chips = THEMES.map((theme, i) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip';
+    chip.style.background = `linear-gradient(150deg, ${theme.c1}, ${theme.c2})`;
+    chip.setAttribute('aria-label', `Jump to ${theme.name}`);
+    chip.addEventListener('click', () => goTo(i));
+    chipsEl.appendChild(chip);
+    return chip;
+  });
+
+  /* ---------- Stack the deck (z-index only) ---------- */
+  function layout() {
+    const total = cards.length;
+    cards.forEach((card, i) => {
+      const pos = (i - top + total) % total;   // 0 = on top
+      card.style.zIndex = String(total - pos);
+    });
+  }
+
+  /* ---------- Refresh the readout + chips ---------- */
+  function updateUI() {
+    const theme = THEMES[top];
+
+    readoutName.textContent = theme.name;
+    readoutName.classList.remove('swap');
+    void readoutName.offsetWidth;              // restart the animation
+    readoutName.classList.add('swap');
+
+    readoutCount.textContent = (top + 1) + ' / ' + THEMES.length;
+    readoutDot.style.background =
+      `linear-gradient(160deg, ${theme.c1}, ${theme.c2})`;
+
+    chips.forEach((chip, i) => chip.classList.toggle('active', i === top));
+  }
+
+  /* ---------- The shuffle itself ---------- */
+  function doShuffle() {
+    return new Promise(resolve => {
+      const total     = cards.length;
+      const outgoing  = cards[top];
+
+      // Advance the deck
+      top = (top + 1) % total;
+      const incoming = cards[top];
+
+      // Restack, then lift the two players above the rest
+      layout();
+      incoming.style.zIndex = String(total + 1);
+      outgoing.style.zIndex = String(total + 2);
+
+      outgoing.classList.add('dealing');
+      incoming.classList.add('rising');
+
+      updateUI();
+      flickButton();
+
+      window.setTimeout(() => {
+        // Clear the animation classes + inline z-indexes
+        outgoing.classList.remove('dealing');
+        incoming.classList.remove('rising');
+        outgoing.style.zIndex = '';
+        incoming.style.zIndex = '';
+        layout();
+        resolve();
+      }, DEAL_MS);
+    });
+  }
+
+  async function shuffle() {
+    if (busy) return;
+    busy = true;
+    await doShuffle();
+    busy = false;
+  }
+
+  async function goTo(target) {
+    if (busy || target === top) return;
+    busy = true;
+    let guard = 0;
+    while (top !== target && guard++ < cards.length) {
+      await doShuffle();
+    }
+    busy = false;
+  }
+
+  /* ---------- Button flourish ---------- */
+  let flickTimer = null;
+  function flickButton() {
+    shuffleBtn.classList.remove('is-shuffling');
+    void shuffleBtn.offsetWidth;
+    shuffleBtn.classList.add('is-shuffling');
+    window.clearTimeout(flickTimer);
+    flickTimer = window.setTimeout(
+      () => shuffleBtn.classList.remove('is-shuffling'), 520
+    );
+  }
+
+  /* ---------- Wire up ---------- */
+  shuffleBtn.addEventListener('click', shuffle);
+
+  // Let the spacebar / enter work when the panel has focus
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && e.target === document.body) {
+      e.preventDefault();
+      shuffle();
+    }
+  });
+
+  /* ---------- Go ---------- */
+  layout();
+  updateUI();
+})();
+</script>
+</body>
+</html>
